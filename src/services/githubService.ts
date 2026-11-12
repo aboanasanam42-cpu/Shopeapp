@@ -177,11 +177,35 @@ export async function fetchLiveRepositoryCatalog(
     throw new Error('Unexpected GitHub Contents API response');
   }
 
-  // Build quick lookup map for release assets (exact + normalized key)
+  // Build quick lookup map for release assets (exact + normalized key + release-manifest.json)
   const releaseAssetMap = new Map<string, string>();
+  let manifestAssetUrl: string | undefined;
   for (const asset of releaseStatus.assets) {
+    if (asset.name.toLowerCase() === 'release-manifest.json') {
+      manifestAssetUrl = asset.downloadUrl;
+      continue;
+    }
     releaseAssetMap.set(asset.name.toLowerCase(), asset.downloadUrl);
     releaseAssetMap.set(normalizeAssetKey(asset.name), asset.downloadUrl);
+  }
+
+  // If release-manifest.json exists on the release (or in /release-manifest.json), merge its exact filename -> release_url mapping
+  try {
+    const manifestRes = await fetch(
+      manifestAssetUrl || `https://raw.githubusercontent.com/${owner}/${repo}/main/release-manifest.json`
+    );
+    if (manifestRes.ok) {
+      const manifestItems = await manifestRes.json();
+      if (Array.isArray(manifestItems)) {
+        for (const m of manifestItems) {
+          if (m?.name && m?.release_url) {
+            releaseAssetMap.set(String(m.name).toLowerCase(), String(m.release_url));
+          }
+        }
+      }
+    }
+  } catch {
+    // fallback seamlessly to direct asset match & raw URL
   }
 
   const validExtensions = ['.apk', '.aab', '.exe', '.zip', '.pdf'];
