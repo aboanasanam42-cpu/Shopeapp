@@ -1,7 +1,77 @@
-import { AssetCategory, AssetType, Product } from '../types';
+import { AssetCategory, AssetType, BinanceNetworkConfig, Product } from '../types';
 
 export const OFFICIAL_USDT_TRC20_ADDRESS = 'TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv';
-export const DEFAULT_BINANCE_PAY_ID = 'Binance Pay / USDT (TRC20)';
+export const OFFICIAL_USDT_EVM_ADDRESS = '0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a';
+export const OFFICIAL_USDT_SOL_ADDRESS = '85BcyhKTsFBvssX5PGm5uCjCK7kucBN7e2PTVfoDm8hj';
+
+export const BINANCE_SPOT_NETWORKS: BinanceNetworkConfig[] = [
+  {
+    id: 'TRC20',
+    shortCode: 'TRX',
+    labelAr: 'Tron (TRC20)',
+    labelEn: 'Tron (TRC20)',
+    address: OFFICIAL_USDT_TRC20_ADDRESS,
+    contractSuffix: '***jLj6t',
+    minDeposit: '>0.01 USDT',
+    confirmations: '1 تأكيد',
+  },
+  {
+    id: 'BSC',
+    shortCode: 'BSC',
+    labelAr: 'BNB Smart Chain (BEP20)',
+    labelEn: 'BNB Smart Chain (BEP20)',
+    address: OFFICIAL_USDT_EVM_ADDRESS,
+    contractSuffix: '***97955',
+    minDeposit: '>0.01 USDT',
+    confirmations: '1 تأكيد',
+  },
+  {
+    id: 'SOL',
+    shortCode: 'SOL',
+    labelAr: 'Solana (SOL)',
+    labelEn: 'Solana (SOL)',
+    address: OFFICIAL_USDT_SOL_ADDRESS,
+    contractSuffix: '***nwNYB',
+    minDeposit: '>0.001 USDT',
+    confirmations: '1 تأكيد',
+    noteAr: 'عناوين SOL حساسة لحالة الأحرف (Case-Sensitive)',
+    noteEn: 'SOL addresses are case-sensitive',
+  },
+  {
+    id: 'ETH',
+    shortCode: 'ETH',
+    labelAr: 'Ethereum (ERC20)',
+    labelEn: 'Ethereum (ERC20)',
+    address: OFFICIAL_USDT_EVM_ADDRESS,
+    contractSuffix: '***31ec7',
+    minDeposit: '>0.001 USDT',
+    confirmations: '6 تأكيدات',
+  },
+  {
+    id: 'POL',
+    shortCode: 'POL',
+    labelAr: 'Polygon POS',
+    labelEn: 'Polygon POS',
+    address: OFFICIAL_USDT_EVM_ADDRESS,
+    contractSuffix: '***58e8f',
+    minDeposit: '>0.02 USDT',
+    confirmations: 'الحزمة 1',
+    noteAr: 'تأكد من أن عملة USDT المودعة تنتهي بعقد 58e8f',
+    noteEn: 'Ensure USDT contract ends with 58e8f',
+  },
+  {
+    id: 'PLASMA',
+    shortCode: 'PLASMA',
+    labelAr: 'Plasma (PLASMA)',
+    labelEn: 'Plasma (PLASMA)',
+    address: OFFICIAL_USDT_EVM_ADDRESS,
+    contractSuffix: '***25ebb',
+    minDeposit: '>0.000001 USDT',
+    confirmations: '1 تأكيد',
+  },
+];
+
+export const DEFAULT_BINANCE_PAY_ID = 'Binance Spot Wallet / Multi-Network USDT';
 export const UNIFORM_PRICE_USDT = 2;
 export const DEFAULT_GITHUB_OWNER = 'aboanasanam42-cpu';
 export const DEFAULT_GITHUB_REPO = 'Shopeapp';
