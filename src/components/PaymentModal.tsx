@@ -40,10 +40,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [verifiedTx, setVerifiedTx] = useState<string>('');
 
   useEffect(() => {
-    const uri = `tron:${recipientAddress}?amount=${totalAmountUSDT}&token=USDT`;
-    QRCode.toDataURL(uri, {
-      width: 240,
-      margin: 1.5,
+    QRCode.toDataURL(recipientAddress, {
+      width: 260,
+      margin: 2,
+      errorCorrectionLevel: 'H',
       color: {
         dark: '#0f172a',
         light: '#ffffff',
@@ -51,7 +51,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     })
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error('QR code error:', err));
-  }, [totalAmountUSDT, recipientAddress]);
+  }, [recipientAddress]);
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(recipientAddress);
@@ -191,14 +191,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl bg-slate-950/70 border border-slate-800">
-              <div className="shrink-0 bg-white p-2 rounded-xl shadow-md">
+              <div className="shrink-0 bg-white p-2.5 rounded-xl border-2 border-emerald-400/50 shadow-md flex flex-col items-center gap-1.5">
                 {qrCodeUrl ? (
-                  <img src={qrCodeUrl} alt="TRON USDT QR Code" className="w-36 h-36 rounded-lg object-contain" />
+                  <img src={qrCodeUrl} alt="TRON USDT QR Code" className="w-36 h-36 rounded object-contain" />
                 ) : (
                   <div className="w-36 h-36 flex items-center justify-center text-slate-500 text-xs">
                     <Loader2 className="w-5 h-5 animate-spin" />
                   </div>
                 )}
+                <span className="text-[10px] font-bold font-mono text-slate-900">
+                  Tron (TRC20) · {totalAmountUSDT.toFixed(2)} USDT
+                </span>
               </div>
 
               <div className="space-y-3 min-w-0 flex-1 w-full">
@@ -208,7 +211,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                       {isAr ? 'معرف الدفع المباشر (Binance Pay ID):' : 'Binance Pay ID:'}
                     </span>
                     <div className="flex items-center justify-between gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
-                      <p className="font-mono text-xs text-amber-300 truncate select-all">{binancePayId}</p>
+                      <p dir="ltr" className="font-mono text-xs text-amber-300 truncate select-all">{binancePayId}</p>
                       <button
                         onClick={handleCopyPayId}
                         className="p-1.5 text-xs text-amber-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors shrink-0"
@@ -224,7 +227,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     {isAr ? 'عنوان محفظة USDT (شبكة TRON TRC20):' : 'USDT Wallet Address (TRON TRC20):'}
                   </span>
                   <div className="flex items-center justify-between gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
-                    <p className="font-mono text-xs text-slate-200 truncate select-all">{recipientAddress}</p>
+                    <p dir="ltr" className="font-mono text-xs text-slate-200 break-all select-all">{recipientAddress}</p>
                     <button
                       onClick={handleCopyAddress}
                       className="p-1.5 text-xs text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors shrink-0"
@@ -238,8 +241,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   <p className="flex items-center gap-1.5 text-amber-300">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                     {isAr
-                      ? 'أرسل المبلغ عبر Binance Pay أو شبكة TRC20 ثم أدخل رقم الطلب أو TxID أدناه.'
-                      : 'Send via Binance Pay or TRC20, then enter your Binance Order ID or TxID below.'}
+                      ? 'صوّر الباركود بكاميرا Binance أو حوّل عبر TRC20 ثم أدخل رقم الطلب أو TxID أدناه.'
+                      : 'Scan QR in Binance or send via TRC20, then enter your Order ID or TxID below.'}
                   </p>
                 </div>
               </div>
@@ -252,6 +255,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               <div className="flex gap-2">
                 <input
                   type="text"
+                  dir="ltr"
                   value={txHash}
                   onChange={(e) => {
                     setTxHash(e.target.value);
@@ -259,7 +263,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   }}
                   placeholder={
                     isAr
-                      ? 'أدخل رقم طلب Binance Pay أو 64 رمزاً لـ TxID...'
+                      ? 'Binance Order ID or 64-char TxID...'
                       : 'Enter Binance Order ID or 64-char TxID...'
                   }
                   className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
