@@ -9,6 +9,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { GitHubAutomationModal } from './components/GitHubAutomationModal';
 import { NetlifyDeploymentModal } from './components/NetlifyDeploymentModal';
 import { PurchasedDownloadsModal } from './components/PurchasedDownloadsModal';
+import { BinanceSpotWalletsSection } from './components/BinanceSpotWalletsSection';
 import { Footer } from './components/Footer';
 
 import { PRODUCTS_CATALOG } from './data/products';
@@ -332,6 +333,8 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <BinanceSpotWalletsSection lang={lang} />
       </main>
 
       <ProductDetailModal
