@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { Copy, Check, ShieldCheck, Zap, Terminal, RefreshCw, ExternalLink } from 'lucide-react';
-import { OFFICIAL_USDT_TRC20_ADDRESS, LIVE_NETLIFY_URL } from '../data/products';
+import { BINANCE_SPOT_NETWORKS, LIVE_NETLIFY_URL } from '../data/products';
+import { BinanceNetworkId } from '../types';
 
 interface HeroProps {
   lang: 'ar' | 'en';
@@ -27,11 +28,15 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenGitHubModal,
 }) => {
   const isAr = lang === 'ar';
+  const [selectedNetId, setSelectedNetId] = useState<BinanceNetworkId>('TRC20');
   const [copied, setCopied] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
 
+  const activeNet =
+    BINANCE_SPOT_NETWORKS.find((n) => n.id === selectedNetId) || BINANCE_SPOT_NETWORKS[0];
+
   useEffect(() => {
-    QRCode.toDataURL(OFFICIAL_USDT_TRC20_ADDRESS, {
+    QRCode.toDataURL(activeNet.address, {
       width: 220,
       margin: 2,
       errorCorrectionLevel: 'H',
@@ -42,10 +47,10 @@ export const Hero: React.FC<HeroProps> = ({
     })
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error('Hero QR code error:', err));
-  }, []);
+  }, [activeNet.address]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(OFFICIAL_USDT_TRC20_ADDRESS);
+    navigator.clipboard.writeText(activeNet.address);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -75,13 +80,13 @@ export const Hero: React.FC<HeroProps> = ({
 
               <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
                 {isAr
-                  ? `عرض مباشر وتلقائي لكافة ملفات مستودع Shopeapp (${totalProductsCount} تطبيقاً وحزمة برمجية وكتاباً علمياً). تسعير موحد 2.00 دولار (2 USDT عبر Binance) لكل ملف مع تحميل فوري عبر إصدار GitHub Release v1.0.0.`
-                  : `Live-synchronized catalog of ${totalProductsCount} Android APKs, medical systems, MEXC trading bots, and Dr. Malik publications from Shopeapp. Uniform $2.00 USD price via Binance with instant Release CDN download.`}
+                  ? `عرض مباشر وتلقائي لكافة ملفات مستودع Shopeapp (${totalProductsCount} تطبيقاً وحزمة برمجية وكتاباً علمياً). تسعير موحد 2.00 دولار (2 USDT عبر Binance Spot) عبر جميع الشبكات مع تحميل فوري.`
+                  : `Live-synchronized catalog of ${totalProductsCount} Android APKs, medical systems, MEXC trading bots, and Dr. Malik publications from Shopeapp. Uniform $2.00 USD price via Binance Spot Wallet across all 6 networks.`}
               </p>
             </div>
 
-            {/* Official Binance / USDT TRC20 Gateway Card */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5 shadow-lg shadow-black/40">
+            {/* Official Binance Spot Multi-Network Gateway Card */}
+            <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5 shadow-lg shadow-black/40 space-y-3.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -89,51 +94,94 @@ export const Hero: React.FC<HeroProps> = ({
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold text-white">
-                      {isAr ? 'الدفع عبر Binance Pay / USDT (TRC-20)' : 'Binance Pay / USDT (TRC-20) Gateway'}
+                      {isAr ? 'المحفظة الفورية Binance · الدفع عبر 6 شبكات USDT' : 'Binance Spot Wallet · 6 USDT Networks'}
                     </h3>
                     <p className="text-xs text-slate-400">
-                      {isAr ? 'امسح الباركود أو انسخ العنوان · $2.00 USD للملف' : 'Scan QR or copy address · $2.00 USD per file'}
+                      {isAr ? 'اختر الشبكة ثم امسح الباركود أو انسخ العنوان · $2.00 للملف' : 'Select network, scan QR or copy address · $2.00/file'}
                     </p>
                   </div>
                 </div>
 
-                <span className="text-xs font-mono tabular-nums text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded self-start sm:self-center">
-                  $2.00 USD / File
-                </span>
+                <a
+                  href="#binance-spot-wallets"
+                  className="text-xs font-mono tabular-nums text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded self-start sm:self-center hover:border-emerald-500 transition-colors"
+                >
+                  {isAr ? 'عرض جميع الباركودات' : 'All QR Boxes'}
+                </a>
               </div>
 
-              <div className="mt-3.5 flex flex-col sm:flex-row items-center gap-4">
+              {/* 6-Network Selector Tabs */}
+              <div className="flex flex-wrap gap-1.5">
+                {BINANCE_SPOT_NETWORKS.map((net) => {
+                  const isActive = net.id === activeNet.id;
+                  return (
+                    <button
+                      key={net.id}
+                      type="button"
+                      onClick={() => setSelectedNetId(net.id)}
+                      className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border transition-colors ${
+                        isActive
+                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/60'
+                          : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
+                      }`}
+                    >
+                      {net.shortCode} · {net.id === 'TRC20' ? 'TRC20' : net.id === 'BSC' ? 'BEP20' : net.id === 'ETH' ? 'ERC20' : net.id}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4">
                 {qrCodeUrl && (
                   <div className="bg-white p-2 rounded-xl border-2 border-emerald-400/50 shadow-md shrink-0 flex flex-col items-center gap-1">
                     <img
                       src={qrCodeUrl}
-                      alt={isAr ? 'باركود الدفع USDT TRC20' : 'USDT TRC20 Payment QR Code'}
+                      alt={`${activeNet.labelEn} USDT QR Code`}
                       className="w-24 h-24 sm:w-28 sm:h-28 rounded object-contain"
                     />
-                    <span className="text-[10px] font-bold font-mono text-slate-900">USDT · TRC20</span>
+                    <span className="text-[10px] font-bold font-mono text-slate-900">USDT · {activeNet.shortCode}</span>
                   </div>
                 )}
 
-                <div className="flex-1 w-full min-w-0 flex items-center justify-between gap-2 bg-slate-950 px-3.5 py-3 rounded-lg border border-slate-800">
-                  <div className="min-w-0 flex-1">
-                    <span className="block text-[11px] text-slate-400 mb-1">
-                      {isAr ? 'عنوان محفظة الاستلام الرسمي (USDT TRC20)' : 'Official Recipient USDT TRC20 Address'}
-                    </span>
-                    <p dir="ltr" className="font-mono text-xs sm:text-sm text-slate-100 break-all select-all">
-                      {OFFICIAL_USDT_TRC20_ADDRESS}
-                    </p>
+                <div className="flex-1 w-full min-w-0 space-y-2">
+                  <div className="flex items-center justify-between gap-2 bg-slate-950 px-3.5 py-2.5 rounded-lg border border-slate-800">
+                    <div className="min-w-0 flex-1">
+                      <span className="block text-[11px] text-slate-400 mb-0.5">
+                        {isAr ? `عنوان إيداع ${activeNet.labelAr}` : `${activeNet.labelEn} Deposit Address`}
+                      </span>
+                      <p dir="ltr" className="font-mono text-xs sm:text-sm text-slate-100 break-all select-all">
+                        {activeNet.address}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md transition-colors shrink-0"
+                    >
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copied ? (isAr ? 'تم النسخ' : 'Copied') : (isAr ? 'نسخ' : 'Copy')}</span>
+                    </button>
                   </div>
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md transition-colors shrink-0"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copied ? (isAr ? 'تم النسخ' : 'Copied') : (isAr ? 'نسخ' : 'Copy')}</span>
-                  </button>
+
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 px-1">
+                    <span>
+                      {isAr ? 'العقد:' : 'Contract:'} <strong dir="ltr" className="font-mono text-slate-200">{activeNet.contractSuffix}</strong>
+                    </span>
+                    <span>
+                      {isAr ? 'الحد الأدنى:' : 'Min:'} <strong dir="ltr" className="font-mono text-emerald-400">{activeNet.minDeposit}</strong>
+                    </span>
+                    <span>
+                      {isAr ? 'التأكيد:' : 'Conf:'} <strong className="text-slate-200">{activeNet.confirmations}</strong>
+                    </span>
+                  </div>
+                  {(activeNet.noteAr || activeNet.noteEn) && (
+                    <p className="text-[11px] text-amber-300 px-1">
+                      {isAr ? activeNet.noteAr : activeNet.noteEn}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pt-1">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pt-1">
                 <span className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-emerald-400" />
                   {isAr ? 'أدخل Binance Order ID أو TxID ليبدأ التنزيل فوراً' : 'Enter Binance Order ID / TxID for instant download'}
