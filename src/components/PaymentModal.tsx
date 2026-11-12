@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import confetti from 'canvas-confetti';
 import { X, Copy, Check, ShieldCheck, Loader2, Download, AlertCircle, Zap } from 'lucide-react';
-import { Product, VerifiedPurchase } from '../types';
-import { OFFICIAL_USDT_TRC20_ADDRESS } from '../data/products';
-import { verifyTrc20Payment } from '../services/tronService';
+import { BinanceNetworkId, Product, VerifiedPurchase } from '../types';
+import { BINANCE_SPOT_NETWORKS } from '../data/products';
+import { verifyMultiNetworkPayment } from '../services/tronService';
 import { getStoredGitHubConfig, resolveProductDownloadUrl } from '../services/githubService';
 
 interface PaymentModalProps {
@@ -27,9 +27,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const isAr = lang === 'ar';
   const totalAmountUSDT = items.reduce((acc, item) => acc + item.priceUSDT, 0);
   const storedConfig = getStoredGitHubConfig();
-  const recipientAddress = storedConfig.usdtAddress || OFFICIAL_USDT_TRC20_ADDRESS;
   const binancePayId = storedConfig.binancePayId || '';
 
+  const [selectedNetworkId, setSelectedNetworkId] = useState<BinanceNetworkId>('TRC20');
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [copiedPayId, setCopiedPayId] = useState(false);
@@ -38,6 +38,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [verificationError, setVerificationError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [verifiedTx, setVerifiedTx] = useState<string>('');
+
+  const activeNetwork =
+    BINANCE_SPOT_NETWORKS.find((n) => n.id === selectedNetworkId) || BINANCE_SPOT_NETWORKS[0];
+  const recipientAddress =
+    selectedNetworkId === 'TRC20' && storedConfig.usdtAddress
+      ? storedConfig.usdtAddress
+      : activeNetwork.address;
 
   useEffect(() => {
     QRCode.toDataURL(recipientAddress, {
@@ -85,26 +92,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     const cleanedInput = txHash.trim();
 
     try {
-      // Allow Binance Pay numeric Order IDs (10-24 digits) as well as 64-char Tron TxIDs
-      const isBinanceOrderId = /^\d{10,24}$/.test(cleanedInput);
-
-      let result;
-      if (isBinanceOrderId) {
-        result = {
-          success: true,
-          message: isAr ? 'تم تأكيد رقم طلب Binance Pay بنجاح!' : 'Binance Pay Order ID confirmed!',
-          txHash: `BINANCE-PAY-${cleanedInput}`,
-          amountUSDT: totalAmountUSDT,
-          fromAddress: 'Binance Pay User',
-        };
-      } else {
-        result = await verifyTrc20Payment(
-          cleanedInput || (allowSandbox ? 'test_demo_verified' : ''),
-          totalAmountUSDT,
-          recipientAddress,
-          allowSandbox
-        );
-      }
+      const result = await verifyMultiNetworkPayment(
+        cleanedInput || (allowSandbox ? 'test_demo_verified' : ''),
+        totalAmountUSDT,
+        selectedNetworkId,
+        recipientAddress,
+        allowSandbox
+      );
 
       if (result.success) {
         setIsSuccess(true);
@@ -128,7 +122,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         onPaymentSuccess(purchaseRecord);
 
-        // Auto-trigger download for single-item checkout
         if (items.length === 1) {
           setTimeout(() => handleDownloadItem(items[0]), 350);
         }
@@ -144,7 +137,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 sm:p-7 space-y-6 text-slate-100 my-8">
+      <div className="relative w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 sm:p-7 space-y-5 text-slate-100 my-8">
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -154,7 +147,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               <h3 className="text-base font-bold text-white">
                 {isSuccess
                   ? isAr ? 'اكتمل الدفع وجارٍ تنزيل الملف!' : 'Payment Confirmed & Downloading!'
-                  : isAr ? 'الدفع عبر Binance Pay / USDT (TRC20)' : 'Binance Pay / USDT (TRC20) Checkout'}
+                  : isAr ? 'الدفع عبر المحفظة الفورية Binance (6 شبكات USDT)' : 'Binance Spot Wallet Checkout (6 USDT Networks)'}
               </h3>
               <p className="text-xs text-slate-400">
                 {isAr ? 'متجر الدكتور مالك الرميمة · السعر الموحد $2.00 USD' : 'Dr. Malik Al-Rumaima Store · Fixed $2.00 USD'}
@@ -170,7 +163,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         </div>
 
         {!isSuccess ? (
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800">
               <div>
                 <span className="block text-xs text-slate-400 mb-0.5">
@@ -190,28 +183,60 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl bg-slate-950/70 border border-slate-800">
+            {/* Network Switcher Buttons */}
+            <div className="space-y-1.5">
+              <span className="block text-xs font-semibold text-slate-300">
+                {isAr ? 'اختر شبكة الدفع المناسبة من حسابك في Binance:' : 'Select Payment Network:'}
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {BINANCE_SPOT_NETWORKS.map((net) => {
+                  const isActive = net.id === selectedNetworkId;
+                  return (
+                    <button
+                      key={net.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedNetworkId(net.id);
+                        setVerificationError(null);
+                      }}
+                      className={`px-3 py-2 rounded-xl border text-xs font-semibold text-start transition-colors flex items-center justify-between gap-2 ${
+                        isActive
+                          ? 'bg-emerald-500/15 border-emerald-400 text-emerald-300'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                      }`}
+                    >
+                      <span className="truncate">{net.labelAr}</span>
+                      <span className="font-mono text-[10px] opacity-80 shrink-0">{net.shortCode}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-5 p-4 rounded-xl bg-slate-950/70 border border-slate-800">
               <div className="shrink-0 bg-white p-2.5 rounded-xl border-2 border-emerald-400/50 shadow-md flex flex-col items-center gap-1.5">
                 {qrCodeUrl ? (
-                  <img src={qrCodeUrl} alt="TRON USDT QR Code" className="w-36 h-36 rounded object-contain" />
+                  <img src={qrCodeUrl} alt={`${activeNetwork.labelEn} USDT QR Code`} className="w-36 h-36 rounded object-contain" />
                 ) : (
                   <div className="w-36 h-36 flex items-center justify-center text-slate-500 text-xs">
                     <Loader2 className="w-5 h-5 animate-spin" />
                   </div>
                 )}
                 <span className="text-[10px] font-bold font-mono text-slate-900">
-                  Tron (TRC20) · {totalAmountUSDT.toFixed(2)} USDT
+                  {activeNetwork.shortCode} · {totalAmountUSDT.toFixed(2)} USDT
                 </span>
               </div>
 
-              <div className="space-y-3 min-w-0 flex-1 w-full">
+              <div className="space-y-2.5 min-w-0 flex-1 w-full">
                 {binancePayId && (
                   <div>
                     <span className="text-xs text-slate-400 block mb-1">
-                      {isAr ? 'معرف الدفع المباشر (Binance Pay ID):' : 'Binance Pay ID:'}
+                      {isAr ? 'طريقة الدفع:' : 'Method:'}
                     </span>
                     <div className="flex items-center justify-between gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
-                      <p dir="ltr" className="font-mono text-xs text-amber-300 truncate select-all">{binancePayId}</p>
+                      <p dir="ltr" className="font-mono text-xs text-amber-300 truncate select-all">
+                        {binancePayId}
+                      </p>
                       <button
                         onClick={handleCopyPayId}
                         className="p-1.5 text-xs text-amber-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors shrink-0"
@@ -224,10 +249,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
                 <div>
                   <span className="text-xs text-slate-400 block mb-1">
-                    {isAr ? 'عنوان محفظة USDT (شبكة TRON TRC20):' : 'USDT Wallet Address (TRON TRC20):'}
+                    {isAr ? `عنوان الإيداع USDT (${activeNetwork.labelAr}):` : `USDT Deposit Address (${activeNetwork.labelEn}):`}
                   </span>
-                  <div className="flex items-center justify-between gap-2 p-2 bg-slate-900 rounded-lg border border-slate-800">
-                    <p dir="ltr" className="font-mono text-xs text-slate-200 break-all select-all">{recipientAddress}</p>
+                  <div className="flex items-center justify-between gap-2 p-2.5 bg-slate-900 rounded-lg border border-slate-800">
+                    <p dir="ltr" className="font-mono text-xs text-slate-100 break-all select-all">{recipientAddress}</p>
                     <button
                       onClick={handleCopyAddress}
                       className="p-1.5 text-xs text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors shrink-0"
@@ -237,12 +262,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   </div>
                 </div>
 
+                <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
+                  <span>{isAr ? 'العقد:' : 'Contract:'} <strong dir="ltr" className="font-mono text-slate-200">{activeNetwork.contractSuffix}</strong></span>
+                  <span>{isAr ? 'الحد الأدنى:' : 'Min:'} <strong dir="ltr" className="font-mono text-emerald-400">{activeNetwork.minDeposit}</strong></span>
+                  <span>{activeNetwork.confirmations}</span>
+                </div>
+
                 <div className="text-[11px] text-slate-400 space-y-1">
                   <p className="flex items-center gap-1.5 text-amber-300">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    {isAr
-                      ? 'صوّر الباركود بكاميرا Binance أو حوّل عبر TRC20 ثم أدخل رقم الطلب أو TxID أدناه.'
-                      : 'Scan QR in Binance or send via TRC20, then enter your Order ID or TxID below.'}
+                    {activeNetwork.noteAr && isAr
+                      ? activeNetwork.noteAr
+                      : isAr
+                        ? `صوّر الباركود أو أرسل عبر شبكة ${activeNetwork.labelAr} ثم أدخل رقم الطلب أو TxID أدناه.`
+                        : `Scan QR or send via ${activeNetwork.labelEn}, then enter your Order ID or TxID below.`}
                   </p>
                 </div>
               </div>
@@ -250,7 +283,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
             <div className="space-y-3">
               <label className="block text-xs font-semibold text-slate-300">
-                {isAr ? 'رقم معاملة بينانس / رمز التحويل (Binance Order ID أو TxID):' : 'Binance Order ID or Transaction Hash (TxID):'}
+                {isAr ? 'رقم معاملة بينانس / رمز التحويل (Binance Order ID أو TxID / SOL Signature):' : 'Binance Order ID or TxID / Signature:'}
               </label>
               <div className="flex gap-2">
                 <input
@@ -263,8 +296,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   }}
                   placeholder={
                     isAr
-                      ? 'Binance Order ID or 64-char TxID...'
-                      : 'Enter Binance Order ID or 64-char TxID...'
+                      ? 'Binance Order ID or TxID / SOL Signature...'
+                      : 'Enter Binance Order ID or TxID / SOL Signature...'
                   }
                   className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
