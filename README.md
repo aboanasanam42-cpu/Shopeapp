@@ -9,14 +9,19 @@
 
 ---
 
-## بوابة الدفع المعتمدة (Binance Pay / USDT TRC-20)
+## بوابة الدفع المعتمدة (المحفظة الفورية Binance Spot Wallet - 6 شبكات USDT)
 
-| وسيلة الدفع | التفاصيل |
-| :--- | :--- |
-| **السعر الموحد** | `$2.00 USD` (`2.00 USDT`) لأي تطبيق أو حزمة أو كتاب |
-| **عنوان محفظة USDT (TRC-20)** | `TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv` |
-| **طريقة التفعيل** | التحويل ثم إدخال رقم طلب بينانس (`Binance Order ID`) أو رمز التحويل (`TxID`) في نافذة الدفع |
-| **التحقق التلقائي** | مدعوم لحظياً عبر شبكة `TronGrid API` مع تسليم فوري للرابط المباشر من GitHub Releases CDN |
+| الشبكة (Network) | الرمز | عنوان الإيداع (Deposit Address) | نهاية العقد | الحد الأدنى |
+| :--- | :---: | :--- | :---: | :---: |
+| **Tron (TRC20)** | `TRX` | `TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv` | `***jLj6t` | `>0.01 USDT` |
+| **BNB Smart Chain (BEP20)** | `BSC` | `0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a` | `***97955` | `>0.01 USDT` |
+| **Solana** | `SOL` | `85BcyhKTsFBvssX5PGm5uCjCK7kucBN7e2PTVfoDm8hj` | `***nwNYB` | `>0.001 USDT` |
+| **Ethereum (ERC20)** | `ETH` | `0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a` | `***31ec7` | `>0.001 USDT` |
+| **Polygon POS** | `POL` | `0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a` | `***58e8f` | `>0.02 USDT` |
+| **Plasma** | `PLASMA` | `0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a` | `***25ebb` | `>0.000001 USDT` |
+
+- **السعر الموحد:** `$2.00 USD` (`2.00 USDT`) لأي تطبيق أو حزمة أو كتاب.
+- **طريقة التفعيل:** مسح الباركود أو التحويل عبر أي من الشبكات أعلاه ثم إدخال رقم طلب بينانس (`Binance Order ID`) أو رمز التحويل (`TxID` / `SOL Signature`) للتحميل المباشر من GitHub Releases CDN.
 
 ---
 
