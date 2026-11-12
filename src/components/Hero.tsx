@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
 import { Copy, Check, ShieldCheck, Zap, Terminal, RefreshCw, ExternalLink } from 'lucide-react';
 import { OFFICIAL_USDT_TRC20_ADDRESS, LIVE_NETLIFY_URL } from '../data/products';
 
@@ -27,6 +28,21 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   const isAr = lang === 'ar';
   const [copied, setCopied] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
+
+  useEffect(() => {
+    QRCode.toDataURL(OFFICIAL_USDT_TRC20_ADDRESS, {
+      width: 220,
+      margin: 2,
+      errorCorrectionLevel: 'H',
+      color: {
+        dark: '#0f172a',
+        light: '#ffffff',
+      },
+    })
+      .then((url) => setQrCodeUrl(url))
+      .catch((err) => console.error('Hero QR code error:', err));
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(OFFICIAL_USDT_TRC20_ADDRESS);
@@ -76,7 +92,7 @@ export const Hero: React.FC<HeroProps> = ({
                       {isAr ? 'الدفع عبر Binance Pay / USDT (TRC-20)' : 'Binance Pay / USDT (TRC-20) Gateway'}
                     </h3>
                     <p className="text-xs text-slate-400">
-                      {isAr ? 'سعر موحد: $2.00 USD (2 USDT) لأي ملف أو كتاب' : 'Uniform Price: $2.00 USD (2 USDT) per file'}
+                      {isAr ? 'امسح الباركود أو انسخ العنوان · $2.00 USD للملف' : 'Scan QR or copy address · $2.00 USD per file'}
                     </p>
                   </div>
                 </div>
@@ -86,22 +102,35 @@ export const Hero: React.FC<HeroProps> = ({
                 </span>
               </div>
 
-              <div className="mt-3.5 flex items-center justify-between gap-2 bg-slate-950 px-3.5 py-2.5 rounded-lg border border-slate-800">
-                <div className="min-w-0 flex-1">
-                  <span className="block text-[11px] text-slate-500 mb-0.5">
-                    {isAr ? 'عنوان محفظة الاستلام الرسمي (USDT TRC20)' : 'Official Recipient USDT TRC20 Address'}
-                  </span>
-                  <p className="font-mono text-xs sm:text-sm text-slate-200 truncate select-all">
-                    {OFFICIAL_USDT_TRC20_ADDRESS}
-                  </p>
+              <div className="mt-3.5 flex flex-col sm:flex-row items-center gap-4">
+                {qrCodeUrl && (
+                  <div className="bg-white p-2 rounded-xl border-2 border-emerald-400/50 shadow-md shrink-0 flex flex-col items-center gap-1">
+                    <img
+                      src={qrCodeUrl}
+                      alt={isAr ? 'باركود الدفع USDT TRC20' : 'USDT TRC20 Payment QR Code'}
+                      className="w-24 h-24 sm:w-28 sm:h-28 rounded object-contain"
+                    />
+                    <span className="text-[10px] font-bold font-mono text-slate-900">USDT · TRC20</span>
+                  </div>
+                )}
+
+                <div className="flex-1 w-full min-w-0 flex items-center justify-between gap-2 bg-slate-950 px-3.5 py-3 rounded-lg border border-slate-800">
+                  <div className="min-w-0 flex-1">
+                    <span className="block text-[11px] text-slate-400 mb-1">
+                      {isAr ? 'عنوان محفظة الاستلام الرسمي (USDT TRC20)' : 'Official Recipient USDT TRC20 Address'}
+                    </span>
+                    <p dir="ltr" className="font-mono text-xs sm:text-sm text-slate-100 break-all select-all">
+                      {OFFICIAL_USDT_TRC20_ADDRESS}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md transition-colors shrink-0"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? (isAr ? 'تم النسخ' : 'Copied') : (isAr ? 'نسخ' : 'Copy')}</span>
+                  </button>
                 </div>
-                <button
-                  onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md transition-colors shrink-0"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? (isAr ? 'تم النسخ' : 'Copied') : (isAr ? 'نسخ العنوان' : 'Copy')}</span>
-                </button>
               </div>
 
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pt-1">
