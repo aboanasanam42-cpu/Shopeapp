@@ -1,0 +1,6 @@
+{
+  "name": "متجر د. مالك عبد الرحمن الرميمة | Dr. Malik Software Marketplace",
+  "description": "Digital Software & Source Code Marketplace by Dr. Malik Abdulrahman Al-Rumaimah with Binance USDT (TRC20) crypto payment gateway and automated release file delivery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

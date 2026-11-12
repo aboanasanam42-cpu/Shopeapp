@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متجر الدكتور مالك الرميمة | تطبيقات وأكواد وكتب رقمية</title>
+  <meta name="description" content="متجر الدكتور مالك الرميمة الرسمي للبرمجيات: تطبيقات أندرويد APK، بوتات تداول MEXC، أدوات طبية وهندسية، ومؤلفات علمية بسعر موحد $2.00 USD عبر Binance مع تحميل مباشر." />
+  <link rel="canonical" href="https://dr-malik-alrumamh-store.netlify.app/" />
+
+  <!-- OpenGraph & Twitter SEO -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dr-malik-alrumamh-store.netlify.app/" />
+  <meta property="og:site_name" content="متجر الدكتور مالك الرميمة" />
+  <meta property="og:title" content="متجر الدكتور مالك الرميمة | تطبيقات وأكواد وكتب رقمية" />
+  <meta property="og:description" content="60+ تطبيقاً وكتاباً علمياً وحزمة برمجية بسعر موحد 2.00 دولار عبر Binance Pay / USDT TRC20 مع تحميل فوري." />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Search Structured Data (JSON-LD Store & Product Schema) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "OnlineStore",
+        "@id": "https://dr-malik-alrumamh-store.netlify.app/#store",
+        "name": "متجر الدكتور مالك الرميمة",
+        "url": "https://dr-malik-alrumamh-store.netlify.app/",
+        "description": "متجر الدكتور مالك الرميمة الرسمي لتطبيقات الأندرويد وبرامج الكمبيوتر وبوتات التداول والمؤلفات العلمية بسعر موحد 2.00 دولار.",
+        "founder": {
+          "@type": "Person",
+          "name": "الدكتور مالك عبد الرحمن الرميمة"
+        },
+        "paymentAccepted": ["Binance Pay", "USDT TRC20", "Cryptocurrency"],
+        "currenciesAccepted": "USD, USDT",
+        "priceRange": "$2.00"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://dr-malik-alrumamh-store.netlify.app/#website",
+        "url": "https://dr-malik-alrumamh-store.netlify.app/",
+        "name": "متجر الدكتور مالك الرميمة",
+        "inLanguage": "ar"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cairo', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white min-h-screen flex flex-col">
+
+  <!-- Top Navigation (3-Zone Contract) -->
+  <header class="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+      <a href="#" class="text-lg font-bold text-white whitespace-nowrap shrink-0">متجر الدكتور مالك الرميمة</a>
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#catalog" class="hover:text-emerald-400 transition-colors whitespace-nowrap">الكتالوج</a>
+        <a href="#binance-info" class="hover:text-emerald-400 transition-colors whitespace-nowrap">بوابة الدفع Binance</a>
+        <a href="https://github.com/aboanasanam42-cpu/Shopeapp" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors whitespace-nowrap">مستودع GitHub</a>
+      </nav>
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="refreshBtn" onclick="loadStoreCatalog()" class="px-4 py-2 text-xs font-semibold text-slate-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors whitespace-nowrap">
+          تحديث الكتالوج
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="border-b border-slate-800 bg-slate-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-7 space-y-5">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold text-emerald-400">
+          <span>متجر الدكتور مالك الرميمة</span>
+          <span class="text-slate-600">·</span>
+          <span>aboanasanam42-cpu/Shopeapp</span>
+          <span class="text-slate-600">·</span>
+          <span id="syncStatus">جاري المزامنة...</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+          تطبيقات وأكواد مصدرية ومؤلفات علمية بسعر موحد 2.00$
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+          مزامنة تلقائية مباشرة مع مستودع GitHub وإصدار Release v1.0.0. ادفع عبر Binance Pay أو USDT (TRC20) وأدخل رقم المعاملة لتحميل الملف فوراً.
+        </p>
+        <div class="relative max-w-xl">
+          <input id="searchInput" type="text" oninput="renderCatalog()" placeholder="ابحث باسم التطبيق، الكتاب، أو الامتداد (apk, pdf, zip)..." class="w-full rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none" />
+        </div>
+      </div>
+
+      <div id="binance-info" class="lg:col-span-5 rounded-2xl border border-slate-800 bg-slate-900 p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <h2 class="text-sm font-bold text-white">بوابة الدفع المعتمدة: Binance / USDT</h2>
+            <p class="text-xs text-slate-400">السعر الموحد لجميع ملفات المتجر</p>
+          </div>
+          <span class="font-mono text-sm font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2.5 py-1 rounded">$2.00 USD</span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <span class="block text-[11px] text-slate-500">محفظة USDT (TRC-20)</span>
+            <span id="walletText" class="font-mono text-xs text-slate-200 break-all">TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv</span>
+          </div>
+          <button onclick="copyWallet()" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-emerald-300 rounded-md shrink-0">نسخ</button>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-xs pt-1">
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+            <span class="text-slate-400 block">إجمالي الملفات</span>
+            <strong id="totalFilesCount" class="text-white text-base font-mono tabular-nums">--</strong>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+            <span class="text-slate-400 block">ملفات Release CDN</span>
+            <strong id="releaseFilesCount" class="text-cyan-400 text-base font-mono tabular-nums">--</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filters -->
+  <section class="border-b border-slate-800 bg-slate-950/70 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 overflow-x-auto">
+      <button onclick="setCategory('all')" data-cat="all" class="cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-emerald-400 border border-slate-700 whitespace-nowrap">الكل</button>
+      <button onclick="setCategory('medical')" data-cat="medical" class="cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white whitespace-nowrap">البرمجيات الطبية</button>
+      <button onclick="setCategory('trading')" data-cat="trading" class="cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white whitespace-nowrap">بوتات التداول MEXC</button>
+      <button onclick="setCategory('utilities')" data-cat="utilities" class="cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white whitespace-nowrap">التطبيقات والأدوات</button>
+      <button onclick="setCategory('books')" data-cat="books" class="cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white whitespace-nowrap">الكتب والمؤلفات</button>
+    </div>
+  </section>
+
+  <!-- Catalog Grid -->
+  <main id="catalog" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- Binance Checkout Modal -->
+  <div id="paymentModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <h3 class="text-base font-bold text-white">تأكيد الدفع عبر Binance ($2.00 USD)</h3>
+          <p id="modalProductName" class="text-xs text-emerald-400 font-mono mt-0.5 truncate max-w-sm"></p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg px-2">&times;</button>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2 text-xs">
+        <p class="text-slate-300">1. حوّل مبلغ <strong class="text-emerald-400 font-mono">2.00 USDT</strong> عبر Binance Pay أو شبكة <strong>TRON (TRC20)</strong> إلى العنوان:</p>
+        <div class="flex items-center justify-between gap-2 bg-slate-900 p-2.5 rounded border border-slate-800">
+          <span class="font-mono text-slate-200 select-all truncate">TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv</span>
+          <button onclick="copyWallet()" class="text-emerald-400 hover:underline shrink-0">نسخ</button>
+        </div>
+        <p class="text-slate-400 pt-1">2. أدخل رقم معاملة بينانس / رمز التحويل (<span class="font-mono">Order ID / TxID</span>) لفتح رابط التحميل المباشر:</p>
+      </div>
+
+      <div class="space-y-3">
+        <input id="txInput" type="text" placeholder="أدخل Binance Order ID أو TxID (64 رمزاً)..." class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-mono text-white focus:border-emerald-500 focus:outline-none" />
+        <p id="modalError" class="hidden text-xs text-red-400"></p>
+        <div class="flex items-center justify-between gap-3">
+          <button onclick="confirmAndDownload()" class="flex-1 py-2.5 px-4 text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 rounded-xl transition-colors">
+            تأكيد الدفع وبدء التحميل المباشر
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-8 text-center text-xs text-slate-500">
+    <p>© 2026 متجر الدكتور مالك الرميمة — مستودع <a href="https://github.com/aboanasanam42-cpu/Shopeapp" class="text-emerald-400 hover:underline">aboanasanam42-cpu/Shopeapp</a></p>
+  </footer>
+
+  <script>
+    const OWNER = 'aboanasanam42-cpu';
+    const REPO = 'Shopeapp';
+    const WALLET = 'TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv';
+    const PRICE_USD = 2.00;
+    const VALID_EXT = ['.apk', '.aab', '.exe', '.zip', '.pdf'];
+
+    let allProducts = [];
+    let currentCategory = 'all';
+    let selectedProduct = null;
+
+    function formatBytes(bytes) {
+      if (!bytes) return '1.0 MB';
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+    }
+
+    function categorize(name) {
+      const l = name.toLowerCase();
+      if (l.endsWith('.pdf') || l.includes('كتاب') || l.includes('تأليف') || l.includes('تاليف') || l.includes('موسوعة') || l.includes('لشعر') || l.includes('نفحات') || l.includes('مزامير') || l.includes('سباعية') || l.includes('المفازة') || l.includes('طبيبك') || l.includes('ظلم الشعوب') || l.includes('ايات')) return 'books';
+      if (l.includes('mexc') || l.includes('تداول') || l.includes('عملات')) return 'trading';
+      if (l.includes('clinic') || l.includes('medical') || l.includes('عياد') || l.includes('rahman')) return 'medical';
+      return 'utilities';
+    }
+
+    function normalizeKey(name) {
+      return name.trim().toLowerCase().replace(/[\s()]+/g, '.').replace(/\.+/g, '.');
+    }
+
+    async function loadStoreCatalog() {
+      const statusEl = document.getElementById('syncStatus');
+      statusEl.textContent = 'جاري الجلب من GitHub...';
+      try {
+        const [contentsRes, releaseRes] = await Promise.all([
+          fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents?ref=main`),
+          fetch(`https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`).catch(() => null)
+        ]);
+        const contents = await contentsRes.json();
+        let releaseAssets = [];
+        if (releaseRes && releaseRes.ok) {
+          const relJson = await releaseRes.json();
+          releaseAssets = relJson.assets || [];
+        }
+        document.getElementById('releaseFilesCount').textContent = releaseAssets.length;
+
+        const assetMap = new Map();
+        releaseAssets.forEach(a => {
+          assetMap.set(a.name.toLowerCase(), a.browser_download_url);
+          assetMap.set(normalizeKey(a.name), a.browser_download_url);
+        });
+
+        allProducts = (Array.isArray(contents) ? contents : [])
+          .filter(f => f.type === 'file' && VALID_EXT.some(ext => f.name.trim().toLowerCase().endsWith(ext)))
+          .map(f => {
+            const relUrl = assetMap.get(f.name.toLowerCase()) || assetMap.get(normalizeKey(f.name));
+            return {
+              name: f.name,
+              cleanTitle: f.name.trim().replace(/\.(apk|zip|pdf|exe|aab)$/i, ''),
+              ext: f.name.trim().split('.').pop().toUpperCase(),
+              size: formatBytes(f.size),
+              category: categorize(f.name),
+              downloadUrl: relUrl || f.download_url,
+              isRelease: Boolean(relUrl)
+            };
+          });
+
+        document.getElementById('totalFilesCount').textContent = allProducts.length;
+        statusEl.textContent = `متصل ومُحدّث (${allProducts.length} ملفاً)`;
+        renderCatalog();
+      } catch (e) {
+        statusEl.textContent = 'تعذر الاتصال اللحظي بـ GitHub API';
+      }
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = 'cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-emerald-400 border border-slate-700 whitespace-nowrap';
+        } else {
+          btn.className = 'cat-btn px-3.5 py-2 text-xs font-semibold rounded-lg text-slate-400 hover:text-white whitespace-nowrap';
+        }
+      });
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const grid = document.getElementById('catalogGrid');
+      const items = allProducts.filter(p => {
+        if (currentCategory !== 'all' && p.category !== currentCategory) return false;
+        if (!q) return true;
+        return p.name.toLowerCase().includes(q) || p.ext.toLowerCase().includes(q);
+      });
+
+      grid.innerHTML = items.map((p, idx) => `
+        <div class="rounded-xl border border-slate-800 bg-slate-900/90 p-5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-slate-400">
+              <span class="font-mono uppercase text-emerald-400">${p.ext} · ${p.isRelease ? 'Release CDN' : 'GitHub Main'}</span>
+              <span class="font-mono tabular-nums">${p.size}</span>
+            </div>
+            <h3 class="text-base font-bold text-white leading-snug line-clamp-2">${p.cleanTitle}</h3>
+            <p class="text-[11px] font-mono text-slate-500 truncate" dir="ltr">${p.name}</p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-500 block">السعر الموحد</span>
+              <span class="text-lg font-bold font-mono text-emerald-400">$2.00 USD</span>
+            </div>
+            <button onclick="openCheckout('${encodeURIComponent(p.name)}')" class="px-3.5 py-2 text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg transition-colors">
+              شراء وتحميل (2.00$)
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openCheckout(encodedName) {
+      const name = decodeURIComponent(encodedName);
+      selectedProduct = allProducts.find(p => p.name === name);
+      if (!selectedProduct) return;
+      document.getElementById('modalProductName').textContent = selectedProduct.name;
+      document.getElementById('txInput').value = '';
+      document.getElementById('modalError').classList.add('hidden');
+      document.getElementById('paymentModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('paymentModal').classList.add('hidden');
+    }
+
+    function copyWallet() {
+      navigator.clipboard.writeText(WALLET);
+    }
+
+    async function confirmAndDownload() {
+      const tx = document.getElementById('txInput').value.trim();
+      const errEl = document.getElementById('modalError');
+      const isTron = /^[0-9a-fA-F]{64}$/.test(tx.replace(/^0x/i, ''));
+      const isBinanceOrder = /^\d{10,24}$/.test(tx);
+
+      if (!isTron && !isBinanceOrder) {
+        errEl.textContent = 'يرجى إدخال رقم طلب Binance Pay (10-24 رقماً) أو رمز معاملة Tron TxID (64 رمزاً).';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (isTron) {
+        try {
+          const res = await fetch('https://api.trongrid.io/wallet/gettransactionbyid', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: tx.replace(/^0x/i, '') })
+          });
+          const data = await res.json();
+          if (data && data.ret && data.ret[0] && data.ret[0].contractRet && data.ret[0].contractRet !== 'SUCCESS') {
+            errEl.textContent = 'المعاملة لم تنجح على شبكة TRON.';
+            errEl.classList.remove('hidden');
+            return;
+          }
+        } catch (e) {}
+      }
+
+      const a = document.createElement('a');
+      a.href = selectedProduct.downloadUrl;
+      a.download = selectedProduct.name.trim();
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      closeModal();
+    }
+
+    loadStoreCatalog();
+  </script>
+</body>
+</html>

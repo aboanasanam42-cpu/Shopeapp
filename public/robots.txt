@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dr-malik-alrumamh-store.netlify.app/sitemap.xml

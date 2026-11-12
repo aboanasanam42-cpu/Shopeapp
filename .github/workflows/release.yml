@@ -1,0 +1,49 @@
+name: متجر الدكتور مالك الرميمة - أتمتة الإصدار v1.0.0
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release_shopeapp:
+    name: Scan & Publish Shopeapp Files to Release v1.0.0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create Release v1.0.0 and Upload All Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN || secrets.GH_TOKEN || secrets.TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_OWNER: aboanasanam42-cpu
+          GITHUB_REPO: Shopeapp
+          RELEASE_TAG: v1.0.0
+        run: |
+          if [ -f "scripts/release_automation.py" ]; then
+            python3 scripts/release_automation.py --local-dir "." --skip-commit
+          else
+            TAG="v1.0.0"
+            TITLE="متجر الدكتور مالك الرميمة - الإصدار الرسمي الأول v1.0.0"
+            NOTES="الإصدار الرسمي الأول لمتجر الدكتور مالك الرميمة (aboanasanam42-cpu/Shopeapp). جميع الملفات والتطبيقات والكتب بسعر موحد 2.00 دولار عبر Binance."
+            export GH_TOKEN="$GITHUB_TOKEN"
+            if ! gh release view "$TAG" >/dev/null 2>&1; then
+              gh release create "$TAG" --title "$TITLE" --notes "$NOTES"
+            fi
+            shopt -s nullglob
+            for f in *.apk *.aab *.exe *.zip *.pdf; do
+              if [ -f "$f" ]; then
+                echo "Uploading asset: $f"
+                gh release upload "$TAG" "$f" --clobber || true
+              fi
+            done
+          fi
