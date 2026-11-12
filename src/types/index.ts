@@ -50,3 +50,19 @@ export interface GitHubConfig {
   usdtAddress?: string;
   isConfigured: boolean;
 }
+
+export type BinanceNetworkId = 'TRC20' | 'BSC' | 'SOL' | 'ETH' | 'POL' | 'PLASMA';
+
+export interface BinanceNetworkConfig {
+  id: BinanceNetworkId;
+  shortCode: string;
+  labelAr: string;
+  labelEn: string;
+  address: string;
+  contractSuffix: string;
+  minDeposit: string;
+  confirmations: string;
+  noteAr?: string;
+  noteEn?: string;
+}
+
