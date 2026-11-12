@@ -314,23 +314,37 @@ def main():
 
     manifest = []
     if args.local_dir:
+        import hashlib
         local_root = Path(args.local_dir)
         files = sorted(
             [p for p in local_root.iterdir() if p.is_file() and p.name.strip().lower().endswith(ALLOWED_EXTENSIONS)],
             key=lambda p: p.name,
         )
-        for p in files:
-            asset_name = make_release_asset_name(p.name, p.name[:8])
-            release_url = upload_bytes_to_release(upload_url_template, token, asset_name, p.read_bytes(), existing_by_name)
+        print(f"[LOCAL SCAN] Found {len(files)} product files in {local_root}", flush=True)
+
+        def process_local(idx_p):
+            idx, p = idx_p
+            size = p.stat().st_size
+            file_hash = hashlib.sha1(p.name.encode("utf-8")).hexdigest()
+            asset_name = make_release_asset_name(p.name, file_hash)
             raw_url = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}/{urllib.parse.quote(p.name)}"
-            manifest.append({
+            existing = existing_by_name.get(asset_name.lower())
+            if existing and existing.get("size") == size:
+                release_url = existing.get("browser_download_url")
+            else:
+                release_url = upload_bytes_to_release(upload_url_template, token, asset_name, p.read_bytes(), existing_by_name)
+                print(f"[{idx}/{len(files)}] Uploaded: {asset_name} ({size} bytes)", flush=True)
+            return {
                 "name": p.name,
                 "asset_name": asset_name,
-                "size": p.stat().st_size,
+                "size": size,
                 "price_usd": 2.00,
                 "release_url": release_url or raw_url,
                 "raw_url": raw_url,
-            })
+            }
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+            manifest = list(pool.map(process_local, enumerate(files, 1)))
     else:
         remote_files = scan_remote_repo_files(token)
 
