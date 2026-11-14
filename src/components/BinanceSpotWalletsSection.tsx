@@ -7,7 +7,9 @@ import {
   OFFICIAL_USDT_EVM_ADDRESS,
   OFFICIAL_USDT_SOL_ADDRESS,
   OFFICIAL_ONECASH_WALLET_NUMBER,
+  OFFICIAL_SHAMEL_WALLET_NUMBER,
   ONECASH_QR_SVG_DATA_URI,
+  SHAMEL_QR_SVG_DATA_URI,
 } from '../data/products';
 
 interface BinanceSpotWalletsSectionProps {
@@ -15,20 +17,35 @@ interface BinanceSpotWalletsSectionProps {
 }
 
 interface WalletGroupCard {
-  id: 'onecash' | 'trc20' | 'evm' | 'sol';
+  id: 'shamel' | 'onecash' | 'trc20' | 'evm' | 'sol';
   titleAr: string;
   titleEn: string;
   networksLabelAr: string;
   networksLabelEn: string;
   address: string;
   badgeText: string;
-  accent?: 'orange' | 'emerald';
+  accent?: 'sky' | 'orange' | 'emerald';
   details: { label: string; contract: string; minDeposit: string }[];
   warningAr?: string;
   warningEn?: string;
 }
 
 const WALLET_GROUPS: WalletGroupCard[] = [
+  {
+    id: 'shamel',
+    titleAr: 'محفظة الشامل موني (AlShamel)',
+    titleEn: 'AlShamel Money Wallet',
+    networksLabelAr: 'دفع محلي فوري عبر الشامل موني',
+    networksLabelEn: 'Instant AlShamel Money Payment',
+    address: OFFICIAL_SHAMEL_WALLET_NUMBER,
+    badgeText: 'AlShamel · 771134103',
+    accent: 'sky',
+    details: [
+      { label: 'رقم محفظة الشامل موني', contract: '771134103', minDeposit: '$2.00 / ما يعادلها' },
+    ],
+    warningAr: 'امسح باركود الشامل موني أو حوّل إلى الرقم 771134103 مباشرة.',
+    warningEn: 'Scan AlShamel Money QR or transfer directly to 771134103.',
+  },
   {
     id: 'onecash',
     titleAr: 'محفظة ون كاش (OneCash)',
@@ -90,12 +107,13 @@ const WALLET_GROUPS: WalletGroupCard[] = [
 export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps> = ({ lang }) => {
   const isAr = lang === 'ar';
   const [qrMap, setQrMap] = useState<Record<string, string>>({
+    shamel: SHAMEL_QR_SVG_DATA_URI,
     onecash: ONECASH_QR_SVG_DATA_URI,
   });
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
-    const cryptoGroups = WALLET_GROUPS.filter((g) => g.id !== 'onecash');
+    const cryptoGroups = WALLET_GROUPS.filter((g) => g.id !== 'onecash' && g.id !== 'shamel');
     Promise.all(
       cryptoGroups.map(async (group) => {
         const dataUrl = await QRCode.toDataURL(group.address, {
@@ -109,6 +127,7 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
     )
       .then((entries) =>
         setQrMap({
+          shamel: SHAMEL_QR_SVG_DATA_URI,
           onecash: ONECASH_QR_SVG_DATA_URI,
           ...Object.fromEntries(entries),
         })
@@ -131,19 +150,19 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
               <QrCode className="w-4 h-4" />
               <span>
                 {isAr
-                  ? `بوابات الدفع المعتمدة (${BINANCE_SPOT_NETWORKS.length} خيارات: Binance الفورية + ون كاش)`
-                  : `Official Payment Gateways (${BINANCE_SPOT_NETWORKS.length} Methods: Binance Spot + OneCash)`}
+                  ? `بوابات الدفع المعتمدة (${BINANCE_SPOT_NETWORKS.length} خيارات: الشامل موني + ون كاش + Binance الفورية)`
+                  : `Official Payment Gateways (${BINANCE_SPOT_NETWORKS.length} Methods: AlShamel + OneCash + Binance Spot)`}
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {isAr
-                ? 'مربعات الباركود وأرقام الحسابات: ون كاش (OneCash) و Binance USDT'
-                : 'Payment QR Codes & Wallet Numbers: OneCash & Binance Spot'}
+                ? 'مربعات الباركود وأرقام الحسابات: الشامل موني وون كاش و Binance USDT'
+                : 'Payment QR Codes & Wallets: AlShamel Money, OneCash & Binance Spot'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
               {isAr
-                ? 'امسح باركود محفظة ون كاش (146158879) أو أي باركود من شبكات Binance الفورية لإتمام الدفع فوراً.'
-                : 'Scan the OneCash QR (146158879) or any Binance Spot network QR below to complete your payment.'}
+                ? 'امسح باركود الشامل موني (771134103) أو ون كاش (146158879) أو أي باركود من شبكات Binance الفورية لإتمام الدفع فوراً.'
+                : 'Scan the AlShamel Money QR (771134103), OneCash QR (146158879), or any Binance Spot network QR below.'}
             </p>
           </div>
           <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-3 py-1.5 rounded-lg self-start sm:self-auto">
@@ -152,16 +171,19 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {WALLET_GROUPS.map((group) => {
             const isOrange = group.accent === 'orange';
+            const isSky = group.accent === 'sky';
             return (
               <div
                 key={group.id}
-                className={`rounded-2xl border p-5 flex flex-col justify-between space-y-4 transition-colors ${
-                  isOrange
-                    ? 'border-orange-500/40 bg-slate-900/95 hover:border-orange-400/70'
-                    : 'border-slate-800 bg-slate-900/90 hover:border-slate-700'
+                className={`rounded-2xl border p-4 flex flex-col justify-between space-y-4 transition-colors ${
+                  isSky
+                    ? 'border-sky-500/40 bg-slate-900/95 hover:border-sky-400/70'
+                    : isOrange
+                      ? 'border-orange-500/40 bg-slate-900/95 hover:border-orange-400/70'
+                      : 'border-slate-800 bg-slate-900/90 hover:border-slate-700'
                 }`}
               >
                 <div className="space-y-4">
@@ -169,7 +191,11 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
                     <h3 className="text-sm sm:text-base font-bold text-white">
                       {isAr ? group.titleAr : group.titleEn}
                     </h3>
-                    <p className={`text-xs font-medium mt-0.5 ${isOrange ? 'text-orange-400' : 'text-emerald-400'}`}>
+                    <p
+                      className={`text-xs font-medium mt-0.5 ${
+                        isSky ? 'text-sky-400' : isOrange ? 'text-orange-400' : 'text-emerald-400'
+                      }`}
+                    >
                       {isAr ? group.networksLabelAr : group.networksLabelEn}
                     </p>
                   </div>
@@ -178,7 +204,11 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
                   <div className="flex justify-center">
                     <div
                       className={`bg-white p-3 rounded-xl border-2 shadow-lg flex flex-col items-center gap-1.5 ${
-                        isOrange ? 'border-orange-400/60' : 'border-emerald-400/50'
+                        isSky
+                          ? 'border-sky-400/60'
+                          : isOrange
+                            ? 'border-orange-400/60'
+                            : 'border-emerald-400/50'
                       }`}
                     >
                       {qrMap[group.id] ? (
@@ -200,15 +230,21 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
                   <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[11px] text-slate-400">
-                        {group.id === 'onecash'
-                          ? isAr ? 'رقم محفظة ون كاش:' : 'OneCash Wallet Number:'
-                          : isAr ? 'عنوان الإيداع:' : 'Deposit Address:'}
+                        {group.id === 'shamel'
+                          ? isAr ? 'رقم الشامل موني:' : 'AlShamel Number:'
+                          : group.id === 'onecash'
+                            ? isAr ? 'رقم محفظة ون كاش:' : 'OneCash Wallet Number:'
+                            : isAr ? 'عنوان الإيداع:' : 'Deposit Address:'}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleCopy(group.id, group.address)}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-slate-800 hover:bg-slate-700 rounded transition-colors ${
-                          isOrange ? 'text-orange-300 hover:text-white' : 'text-emerald-300 hover:text-white'
+                          isSky
+                            ? 'text-sky-300 hover:text-white'
+                            : isOrange
+                              ? 'text-orange-300 hover:text-white'
+                              : 'text-emerald-300 hover:text-white'
                         }`}
                       >
                         {copiedId === group.id ? (
@@ -222,7 +258,11 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
                     <p
                       dir="ltr"
                       className={`font-mono break-all select-all leading-relaxed ${
-                        group.id === 'onecash' ? 'text-base font-bold text-orange-300' : 'text-xs text-slate-100'
+                        group.id === 'shamel'
+                          ? 'text-base font-bold text-sky-300'
+                          : group.id === 'onecash'
+                            ? 'text-base font-bold text-orange-300'
+                            : 'text-xs text-slate-100'
                       }`}
                     >
                       {group.address}
@@ -248,9 +288,11 @@ export const BinanceSpotWalletsSection: React.FC<BinanceSpotWalletsSectionProps>
                 {(group.warningAr || group.warningEn) && (
                   <p
                     className={`flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-lg border ${
-                      isOrange
-                        ? 'text-orange-200 bg-orange-950/30 border-orange-800/40'
-                        : 'text-amber-300 bg-amber-950/30 border-amber-800/40'
+                      isSky
+                        ? 'text-sky-200 bg-sky-950/30 border-sky-800/40'
+                        : isOrange
+                          ? 'text-orange-200 bg-orange-950/30 border-orange-800/40'
+                          : 'text-amber-300 bg-amber-950/30 border-amber-800/40'
                     }`}
                   >
                     <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
