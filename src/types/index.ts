@@ -51,7 +51,7 @@ export interface GitHubConfig {
   isConfigured: boolean;
 }
 
-export type BinanceNetworkId = 'TRC20' | 'BSC' | 'SOL' | 'ETH' | 'POL' | 'PLASMA' | 'ONECASH';
+export type BinanceNetworkId = 'TRC20' | 'BSC' | 'SOL' | 'ETH' | 'POL' | 'PLASMA' | 'ONECASH' | 'SHAMEL';
 
 export interface BinanceNetworkConfig {
   id: BinanceNetworkId;
