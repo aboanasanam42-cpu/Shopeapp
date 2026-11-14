@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { Copy, Check, ShieldCheck, Zap, Terminal, RefreshCw, ExternalLink } from 'lucide-react';
-import { BINANCE_SPOT_NETWORKS, LIVE_NETLIFY_URL } from '../data/products';
+import { BINANCE_SPOT_NETWORKS, LIVE_NETLIFY_URL, ONECASH_QR_SVG_DATA_URI } from '../data/products';
 import { BinanceNetworkId } from '../types';
 
 interface HeroProps {
@@ -36,6 +36,10 @@ export const Hero: React.FC<HeroProps> = ({
     BINANCE_SPOT_NETWORKS.find((n) => n.id === selectedNetId) || BINANCE_SPOT_NETWORKS[0];
 
   useEffect(() => {
+    if (activeNet.id === 'ONECASH') {
+      setQrCodeUrl(ONECASH_QR_SVG_DATA_URI);
+      return;
+    }
     QRCode.toDataURL(activeNet.address, {
       width: 220,
       margin: 2,
@@ -47,7 +51,7 @@ export const Hero: React.FC<HeroProps> = ({
     })
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error('Hero QR code error:', err));
-  }, [activeNet.address]);
+  }, [activeNet.id, activeNet.address]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(activeNet.address);
@@ -121,11 +125,15 @@ export const Hero: React.FC<HeroProps> = ({
                       onClick={() => setSelectedNetId(net.id)}
                       className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border transition-colors ${
                         isActive
-                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/60'
+                          ? net.id === 'ONECASH'
+                            ? 'bg-orange-500/20 text-orange-300 border-orange-400/70'
+                            : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/60'
                           : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
                       }`}
                     >
-                      {net.shortCode} · {net.id === 'TRC20' ? 'TRC20' : net.id === 'BSC' ? 'BEP20' : net.id === 'ETH' ? 'ERC20' : net.id}
+                      {net.id === 'ONECASH'
+                        ? 'ون كاش · OneCash'
+                        : `${net.shortCode} · ${net.id === 'TRC20' ? 'TRC20' : net.id === 'BSC' ? 'BEP20' : net.id === 'ETH' ? 'ERC20' : net.id}`}
                     </button>
                   );
                 })}
@@ -139,7 +147,9 @@ export const Hero: React.FC<HeroProps> = ({
                       alt={`${activeNet.labelEn} USDT QR Code`}
                       className="w-24 h-24 sm:w-28 sm:h-28 rounded object-contain"
                     />
-                    <span className="text-[10px] font-bold font-mono text-slate-900">USDT · {activeNet.shortCode}</span>
+                    <span className="text-[10px] font-bold font-mono text-slate-900">
+                      {activeNet.id === 'ONECASH' ? 'OneCash · 146158879' : `USDT · ${activeNet.shortCode}`}
+                    </span>
                   </div>
                 )}
 
