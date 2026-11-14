@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 import confetti from 'canvas-confetti';
 import { X, Copy, Check, ShieldCheck, Loader2, Download, AlertCircle, Zap } from 'lucide-react';
 import { BinanceNetworkId, Product, VerifiedPurchase } from '../types';
-import { BINANCE_SPOT_NETWORKS } from '../data/products';
+import { BINANCE_SPOT_NETWORKS, ONECASH_QR_SVG_DATA_URI } from '../data/products';
 import { verifyMultiNetworkPayment } from '../services/tronService';
 import { getStoredGitHubConfig, resolveProductDownloadUrl } from '../services/githubService';
 
@@ -47,6 +47,10 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
       : activeNetwork.address;
 
   useEffect(() => {
+    if (selectedNetworkId === 'ONECASH') {
+      setQrCodeUrl(ONECASH_QR_SVG_DATA_URI);
+      return;
+    }
     QRCode.toDataURL(recipientAddress, {
       width: 260,
       margin: 2,
@@ -58,7 +62,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     })
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error('QR code error:', err));
-  }, [recipientAddress]);
+  }, [selectedNetworkId, recipientAddress]);
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(recipientAddress);
@@ -223,7 +227,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   </div>
                 )}
                 <span className="text-[10px] font-bold font-mono text-slate-900">
-                  {activeNetwork.shortCode} · {totalAmountUSDT.toFixed(2)} USDT
+                  {activeNetwork.id === 'ONECASH'
+                    ? 'OneCash · 146158879'
+                    : `${activeNetwork.shortCode} · ${totalAmountUSDT.toFixed(2)} USDT`}
                 </span>
               </div>
 
@@ -283,7 +289,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
             <div className="space-y-3">
               <label className="block text-xs font-semibold text-slate-300">
-                {isAr ? 'رقم معاملة بينانس / رمز التحويل (Binance Order ID أو TxID / SOL Signature):' : 'Binance Order ID or TxID / Signature:'}
+                {isAr
+                  ? 'رقم معاملة ون كاش / رقم طلب بينانس أو رمز التحويل (TxID):'
+                  : 'OneCash Ref / Binance Order ID or TxID:'}
               </label>
               <div className="flex gap-2">
                 <input
@@ -295,9 +303,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     setVerificationError(null);
                   }}
                   placeholder={
-                    isAr
-                      ? 'Binance Order ID or TxID / SOL Signature...'
-                      : 'Enter Binance Order ID or TxID / SOL Signature...'
+                    activeNetwork.id === 'ONECASH'
+                      ? 'OneCash Transfer Reference / Ref ID...'
+                      : 'Binance Order ID or TxID / SOL Signature...'
                   }
                   className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-xs font-mono text-white placeholder-slate-600 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
