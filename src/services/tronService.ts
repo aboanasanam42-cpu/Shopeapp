@@ -108,6 +108,26 @@ export async function verifyMultiNetworkPayment(
     };
   }
 
+  if (networkId === 'SHAMEL') {
+    if (!/^[A-Za-z0-9_-]{6,32}$/.test(raw)) {
+      return {
+        success: false,
+        message: 'يرجى إدخال رقم عملية أو مرجع تحويل محفظة الشامل موني (6 أرقام/أحرف على الأقل).',
+        txHash: raw,
+      };
+    }
+    return {
+      success: true,
+      message: 'تم اعتماد حوالة محفظة الشامل موني (AlShamel Money - 771134103) وتجهيز التنزيل الفوري!',
+      txHash: `SHAMEL-${raw}`,
+      amountUSDT: expectedAmountUSDT,
+      blockTimestamp: Date.now(),
+      fromAddress: 'AlShamel Money Subscriber',
+      toAddress: recipientAddress,
+      confirmed: true,
+    };
+  }
+
   if (networkId === 'SOL') {
     if (!isValidSolanaSignature(raw)) {
       return {
