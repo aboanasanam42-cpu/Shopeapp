@@ -3,6 +3,12 @@ import { AssetCategory, AssetType, BinanceNetworkConfig, Product } from '../type
 export const OFFICIAL_USDT_TRC20_ADDRESS = 'TBZjJKmePUGVT5tGwpQrfk6z7ZmSiJkTpv';
 export const OFFICIAL_USDT_EVM_ADDRESS = '0x31ac47694c792a7c7d5ced4cc8dc31010b83c20a';
 export const OFFICIAL_USDT_SOL_ADDRESS = '85BcyhKTsFBvssX5PGm5uCjCK7kucBN7e2PTVfoDm8hj';
+export const OFFICIAL_ONECASH_WALLET_NUMBER = '146158879';
+
+const ONECASH_RAW_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h25v25H0z"/><path stroke="#1e3a78" d="M2 2.5h7M11 2.5h1M14 2.5h1M16 2.5h7M2 3.5h1M8 3.5h1M10 3.5h1M13 3.5h1M16 3.5h1M22 3.5h1M2 4.5h1M4 4.5h3M8 4.5h1M11 4.5h1M16 4.5h1M18 4.5h3M22 4.5h1M2 5.5h1M4 5.5h3M8 5.5h1M10 5.5h1M13 5.5h1M16 5.5h1M18 5.5h3M22 5.5h1M2 6.5h1M4 6.5h3M8 6.5h1M12 6.5h3M16 6.5h1M18 6.5h3M22 6.5h1M2 7.5h1M8 7.5h1M10 7.5h3M14 7.5h1M16 7.5h1M22 7.5h1M2 8.5h7M10 8.5h1M12 8.5h1M14 8.5h1M16 8.5h7M12 9.5h3M2 10.5h5M8 10.5h4M14 10.5h2M17 10.5h1M19 10.5h1M21 10.5h1M4 11.5h2M7 11.5h1M11 11.5h1M14 11.5h1M17 11.5h1M19 11.5h1M22 11.5h1M2 12.5h1M4 12.5h2M7 12.5h7M15 12.5h1M18 12.5h1M20 12.5h1M22 12.5h1M4 13.5h1M6 13.5h1M9 13.5h4M17 13.5h2M20 13.5h2M2 14.5h1M8 14.5h2M13 14.5h1M15 14.5h1M18 14.5h1M20 14.5h3M10 15.5h1M13 15.5h4M20 15.5h1M22 15.5h1M2 16.5h7M10 16.5h2M14 16.5h1M16 16.5h2M21 16.5h1M2 17.5h1M8 17.5h1M11 17.5h1M13 17.5h4M19 17.5h1M22 17.5h1M2 18.5h1M4 18.5h3M8 18.5h1M10 18.5h1M12 18.5h1M14 18.5h1M17 18.5h1M20 18.5h1M2 19.5h1M4 19.5h3M8 19.5h1M10 19.5h1M14 19.5h1M17 19.5h1M19 19.5h1M2 20.5h1M4 20.5h3M8 20.5h1M10 20.5h2M13 20.5h1M15 20.5h1M18 20.5h1M2 21.5h1M8 21.5h1M10 21.5h1M12 21.5h1M17 21.5h2M20 21.5h2M2 22.5h7M10 22.5h1M12 22.5h2M15 22.5h1M18 22.5h1M20 22.5h1"/></svg>';
+
+export const ONECASH_QR_SVG_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(ONECASH_RAW_SVG)}`;
 
 export const BINANCE_SPOT_NETWORKS: BinanceNetworkConfig[] = [
   {
@@ -68,6 +74,18 @@ export const BINANCE_SPOT_NETWORKS: BinanceNetworkConfig[] = [
     contractSuffix: '***25ebb',
     minDeposit: '>0.000001 USDT',
     confirmations: '1 تأكيد',
+  },
+  {
+    id: 'ONECASH',
+    shortCode: 'ون كاش',
+    labelAr: 'ون كاش (OneCash)',
+    labelEn: 'OneCash Wallet',
+    address: OFFICIAL_ONECASH_WALLET_NUMBER,
+    contractSuffix: 'رقم الحساب',
+    minDeposit: '$2.00 / ما يعادلها',
+    confirmations: 'فوري (OneCash)',
+    noteAr: 'بإمكان مشتركي ون كاش مسح رمز QR أو التحويل لرقم الحساب 146158879',
+    noteEn: 'OneCash users can scan QR or transfer to account 146158879',
   },
 ];
 
