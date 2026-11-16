@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { Copy, Check, ShieldCheck, Zap, Terminal, RefreshCw, ExternalLink } from 'lucide-react';
-import { BINANCE_SPOT_NETWORKS, LIVE_NETLIFY_URL, ONECASH_QR_SVG_DATA_URI, SHAMEL_QR_SVG_DATA_URI } from '../data/products';
+import { Copy, Check, ShieldCheck, Zap, Terminal, RefreshCw, ExternalLink, Send } from 'lucide-react';
+import { BINANCE_SPOT_NETWORKS, LIVE_NETLIFY_URL, TELEGRAM_CHANNEL_URL, ONECASH_QR_SVG_DATA_URI, SHAMEL_QR_SVG_DATA_URI } from '../data/products';
 import { BinanceNetworkId } from '../types';
 
 interface HeroProps {
@@ -259,15 +259,26 @@ export const Hero: React.FC<HeroProps> = ({
                     <h4 className="text-base font-bold text-white">
                       {isAr ? 'مستودع Shopeapp وإصدار v1.0.0' : 'Shopeapp Repo & Release v1.0.0'}
                     </h4>
-                    <a
-                      href={LIVE_NETLIFY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1"
-                    >
-                      <span>Netlify Live</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
+                    <div className="flex items-center gap-3">
+                      <a
+                        href={TELEGRAM_CHANNEL_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-sky-400 hover:text-sky-300 inline-flex items-center gap-1 font-medium"
+                      >
+                        <Send className="w-3 h-3" />
+                        <span>{isAr ? 'تليجرام' : 'Telegram'}</span>
+                      </a>
+                      <a
+                        href={LIVE_NETLIFY_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1"
+                      >
+                        <span>Netlify Live</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
                     {isAr
