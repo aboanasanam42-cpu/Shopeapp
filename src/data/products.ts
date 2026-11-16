@@ -112,6 +112,7 @@ export const DEFAULT_GITHUB_OWNER = 'aboanasanam42-cpu';
 export const DEFAULT_GITHUB_REPO = 'Shopeapp';
 export const DEFAULT_RELEASE_TAG = 'v1.0.0';
 export const LIVE_NETLIFY_URL = 'https://dr-malik-alrumamh-store.netlify.app';
+export const TELEGRAM_CHANNEL_URL = 'https://t.me/Malik_App_Store';
 
 export function formatBytes(bytes: number): string {
   if (!bytes || bytes <= 0) return '1.0 MB';
