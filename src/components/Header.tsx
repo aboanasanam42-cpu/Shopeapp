@@ -1,6 +1,7 @@
 import React from 'react';
-import { ShoppingBag, Github, Globe, Cloud, CheckCircle2 } from 'lucide-react';
+import { ShoppingBag, Github, Globe, Cloud, CheckCircle2, Send } from 'lucide-react';
 import { CartItem, VerifiedPurchase } from '../types';
+import { TELEGRAM_CHANNEL_URL } from '../data/products';
 
 interface HeaderProps {
   lang: 'ar' | 'en';
@@ -52,6 +53,15 @@ export const Header: React.FC<HeaderProps> = ({
             className="hover:text-emerald-400 transition-colors whitespace-nowrap shrink-0"
           >
             {isAr ? 'الدفع عبر Binance' : 'Binance Pay'}
+          </a>
+          <a
+            href={TELEGRAM_CHANNEL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sky-400 hover:text-sky-300 transition-colors whitespace-nowrap shrink-0"
+          >
+            <Send className="w-3.5 h-3.5" />
+            <span>{isAr ? 'قناة التليجرام' : 'Telegram'}</span>
           </a>
           <button
             onClick={onOpenGitHubModal}
