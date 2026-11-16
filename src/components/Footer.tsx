@@ -1,6 +1,6 @@
 import React from 'react';
-import { ShieldCheck, ExternalLink } from 'lucide-react';
-import { OFFICIAL_USDT_TRC20_ADDRESS, LIVE_NETLIFY_URL } from '../data/products';
+import { ShieldCheck, ExternalLink, Send } from 'lucide-react';
+import { OFFICIAL_USDT_TRC20_ADDRESS, LIVE_NETLIFY_URL, TELEGRAM_CHANNEL_URL } from '../data/products';
 
 interface FooterProps {
   lang: 'ar' | 'en';
@@ -33,6 +33,12 @@ export const Footer: React.FC<FooterProps> = ({
                 <span>{isAr ? 'الرابط الرسمي: ' : 'Live Store: '}</span>
                 <a href={LIVE_NETLIFY_URL} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
                   {LIVE_NETLIFY_URL}
+                </a>
+              </div>
+              <div>
+                <span>{isAr ? 'قناة التليجرام: ' : 'Telegram Channel: '}</span>
+                <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">
+                  {TELEGRAM_CHANNEL_URL}
                 </a>
               </div>
               <div>
@@ -90,6 +96,17 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   {isAr ? 'نشر Netlify Drop والفهرسة' : 'Netlify Drop & Google SEO'}
                 </button>
+              </li>
+              <li>
+                <a
+                  href={TELEGRAM_CHANNEL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sky-400 hover:text-sky-300 transition-colors inline-flex items-center gap-1"
+                >
+                  <Send className="w-3 h-3" />
+                  <span>{isAr ? 'قناة التليجرام: Malik_App_Store' : 'Telegram: Malik_App_Store'}</span>
+                </a>
               </li>
               <li>
                 <a
