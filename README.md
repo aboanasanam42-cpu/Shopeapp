@@ -3,6 +3,7 @@
 المنصة الرسمية لتحميل وشراء تطبيقات الأندرويد (`.apk`)، الأنظمة الطبية، برمجيات سطح المكتب، بوتات التداول، والمؤلفات والكتب العلمية للدكتور **مالك عبد الرحمن الرميمة**.
 
 - **رابط المتجر المباشر (Netlify):** [https://dr-malik-alrumamh-store.netlify.app](https://dr-malik-alrumamh-store.netlify.app)
+- **قناة التليجرام الرسمية:** [https://t.me/Malik_App_Store](https://t.me/Malik_App_Store)
 - **مستودع GitHub الرسمي:** [https://github.com/aboanasanam42-cpu/Shopeapp](https://github.com/aboanasanam42-cpu/Shopeapp)
 - **الإصدار الرسمي للتحميلات:** [`Release v1.0.0`](https://github.com/aboanasanam42-cpu/Shopeapp/releases/tag/v1.0.0)
 - **السعر الموحد لجميع المنتجات:** **$2.00 USD** (`2 USDT` عبر Binance Pay / شبكة TRON TRC-20)
